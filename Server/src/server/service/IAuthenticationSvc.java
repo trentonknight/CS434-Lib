@@ -3,11 +3,10 @@
  * and open the template in the editor.
  */
 package server.service;
+import server.domain.Login;
 
-/**
- *
- * @author trentonknight
- */
-public class IAuthenticationSvc {
-    
+public interface IAuthenticationSvc {
+     public Login add(Login login);
+     public Login getUser(Login login);
+
 }
