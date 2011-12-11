@@ -21,24 +21,38 @@ public class MiniClient {
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(),4444);
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.writeObject("Java Joe");
-            String str = (String) in.readObject();
-            System.out.println(str);
-        } catch (Exception e) {
-            // log the error
-            System.out.println("Exception " + e.getMessage());
-        } finally {
-            try {
-                in.close();
-                out.close();
-                socket.close();
-            } catch (Exception e) {
-                // log the error
-                System.out.println("Exception " + e.getMessage());
-            }
-        }
+            InetAddress connect = InetAddress.getLocalHost();
+            socket = new Socket(connect, 4444);
+            System.out.println("socket channel: " + socket.getChannel()+
+                                   "\nsocket inet address: " + socket.getInetAddress()+
+                                   "\nsocket get input stream: " + socket.getInputStream()+
+                                   "\nsocket local address: " + socket.getLocalAddress()+
+                                   "\nsocket local port: " + socket.getLocalPort()+
+                                   "\nsocket local socket address: " + socket.getLocalSocketAddress()+
+                                   "\nsocket get output stream: " + socket.getOutputStream()+
+                                   "\nsocket get port: " + socket.getPort()+
+                                   "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()+
+                                   "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
+
+       
+       out = new ObjectOutputStream(socket.getOutputStream());
+       System.out.println("\nclient out: "+ out.toString());
+       in = new ObjectInputStream(socket.getInputStream());
+       System.out.println("\nclient in: "+ in.toString());
+       out.writeObject("Java Joe");
+       String str = (String)in.readObject();
+       System.out.println(str);
+   } catch (Exception e) {
+       // log the error
+       System.out.println("Exception " + e.getMessage());
+   } finally {
+     try {
+         in.close();
+         out.close();
+         socket.close();
+     } catch (Exception e) {
+      // log the error
+      System.out.println("Exception " + e.getMessage());
+   }
     }
-}
+}}
