@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
  
 public class ConnectionMgr {
-    public static void main(String[] args) throws IOException {
- 
+    public startCon() throws Exception {
+        
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(4444);
@@ -30,13 +30,7 @@ public class ConnectionMgr {
             in = new ObjectInputStream(clientSocket.getInputStream());
             try {
                 String inputStr = (String)in.readObject();
-                if(!inputStr.equals("exit")){
                 out.writeObject("Hello" + inputStr);
-            }
-                else{
-                    exit = true;
-                    out.writeObject("Exiting");
-                }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConnectionMgr.class.getName()).log(Level.SEVERE, null, ex);
             }

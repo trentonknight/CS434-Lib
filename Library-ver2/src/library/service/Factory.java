@@ -27,7 +27,7 @@ public class Factory {
     }
    
     public IAuthSvc getAuthSvc() {
-        return (IAuthSvc) new IAuthSvcSerializedImpl();
+        return (IAuthSvc) new IAuthSvcSocketImpl();
     }
      public IBookSvc getBookSvc(){
         return new IBookSvcSerializedImpl();

@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package server;
+import server.business.ConnectionMgr;
 
 /**
  *
@@ -14,6 +15,6 @@ public class Server {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+       ConnectionMgr con = new ConnectionMgr();
     }
 }
