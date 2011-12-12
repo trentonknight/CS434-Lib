@@ -21,29 +21,71 @@ public class IAuthSvcSocketImpl implements IAuthSvc {
 
     public Login add(Login login) {
         Socket socket = null;
-
+        ObjectOutputStream out = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 4444);
-            in = new ObjectInputStream(socket.getInputStream());
+            InetAddress connect = InetAddress.getLocalHost();
+            socket = new Socket(connect, 4444);
+            System.out.println("socket channel: " + socket.getChannel()
+                    + "\nsocket inet address: " + socket.getInetAddress()
+                    + "\nsocket get input stream: " + socket.getInputStream()
+                    + "\nsocket local address: " + socket.getLocalAddress()
+                    + "\nsocket local port: " + socket.getLocalPort()
+                    + "\nsocket local socket address: " + socket.getLocalSocketAddress()
+                    + "\nsocket get output stream: " + socket.getOutputStream()
+                    + "\nsocket get port: " + socket.getPort()
+                    + "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()
+                    + "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
+
+
             out = new ObjectOutputStream(socket.getOutputStream());
-            out.writeObject(login.toString());
-        } catch (IOException e) {
-            System.err.println("Could not listen on port: 4444.");
-            System.exit(1);
+            out.writeObject(login);
+        } catch (Exception e) {
+            // log the error
+            System.out.println("Exception " + e.getMessage());
+        } finally {
+            try {
+                out.close();
+                socket.close();
+            } catch (Exception e) {
+                // log the error
+                System.out.println("Exception " + e.getMessage());
+            }
         }
-
-        try {
-            in.close();
-            out.close();
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(IAuthSvcSocketImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         return login;
     }
 
     public Login getUser(Login login) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Socket socket = null;
+        ObjectInputStream in = null;
+        try {
+            InetAddress connect = InetAddress.getLocalHost();
+            socket = new Socket(connect, 4444);
+            System.out.println("socket channel: " + socket.getChannel()
+                    + "\nsocket inet address: " + socket.getInetAddress()
+                    + "\nsocket get input stream: " + socket.getInputStream()
+                    + "\nsocket local address: " + socket.getLocalAddress()
+                    + "\nsocket local port: " + socket.getLocalPort()
+                    + "\nsocket local socket address: " + socket.getLocalSocketAddress()
+                    + "\nsocket get output stream: " + socket.getOutputStream()
+                    + "\nsocket get port: " + socket.getPort()
+                    + "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()
+                    + "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
+
+       in = new ObjectInputStream(socket.getInputStream());
+       login = (Login)in.readObject(); 
+       
+        } catch (Exception e) {
+            // log the error
+            System.out.println("Exception " + e.getMessage());
+        } finally {
+            try {
+                in.close();
+                socket.close();
+            } catch (Exception e) {
+                // log the error
+                System.out.println("Exception " + e.getMessage());
+            }
+        }
+        return login;
     }
 }
