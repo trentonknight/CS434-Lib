@@ -13,6 +13,8 @@ package miniserver.domain;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import miniserver.business.ConnectionMgr;
 
 /**
@@ -20,9 +22,21 @@ import miniserver.business.ConnectionMgr;
  * @author trentonknight
  */
 public class MiniServerUI extends javax.swing.JFrame {
+    
+    public MiniServerUI() {
+
+try {
+    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        if ("Nimbus".equals(info.getName())) {
+            UIManager.setLookAndFeel(info.getClassName());
+            break;
+        }
+    }
+} catch (Exception e) {
+    // If Nimbus is not available, you can set the GUI to another look and feel.
+}
 
     /** Creates new form MiniServerUI */
-    public MiniServerUI() {
         initComponents();
     }
 
@@ -36,15 +50,18 @@ public class MiniServerUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Start Server");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("miniServer");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -53,14 +70,20 @@ public class MiniServerUI extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .add(144, 144, 144)
                 .add(jButton1)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(141, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(168, Short.MAX_VALUE)
+                .add(jLabel1)
+                .add(166, 166, 166))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(53, 53, 53)
+                .add(22, 22, 22)
+                .add(jLabel1)
+                .add(18, 18, 18)
                 .add(jButton1)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -70,7 +93,8 @@ public class MiniServerUI extends javax.swing.JFrame {
         Login login = new Login();
         ConnectionMgr con = new ConnectionMgr();
         try {
-            con.Conn(login);
+        Login newLog = con.Conn(login);
+        System.out.println(newLog.toString());
         } catch (IOException ex) {
             Logger.getLogger(MiniServerUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,5 +137,6 @@ public class MiniServerUI extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

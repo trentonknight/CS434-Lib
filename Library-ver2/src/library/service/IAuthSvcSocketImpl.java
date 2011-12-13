@@ -33,10 +33,14 @@ public class IAuthSvcSocketImpl implements IAuthSvc {
                     + "\nsocket get port: " + socket.getPort()
                     + "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()
                     + "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
-
-
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.writeObject(login);
+       out = new ObjectOutputStream(socket.getOutputStream());
+       System.out.println("\nclient out: "+ out.toString());
+       in = new ObjectInputStream(socket.getInputStream());
+       System.out.println("\nclient in: "+ in.toString());
+       out.writeObject(login.getUsername());
+       out.writeObject(login.getPassword());
+      
+           
         } catch (Exception e) {
             // log the error
             System.out.println("Exception " + e.getMessage());
