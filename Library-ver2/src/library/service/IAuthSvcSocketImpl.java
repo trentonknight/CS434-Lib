@@ -6,6 +6,8 @@ package library.service;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import library.domain.Login;
 
 /**
@@ -22,6 +24,7 @@ public class IAuthSvcSocketImpl implements IAuthSvc {
         ObjectOutputStream out = null;
         try {
             InetAddress connect = InetAddress.getLocalHost();
+            socket.setKeepAlive(true);
             socket = new Socket(connect, 4444);
             System.out.println("socket channel: " + socket.getChannel()
                     + "\nsocket inet address: " + socket.getInetAddress()
@@ -33,14 +36,14 @@ public class IAuthSvcSocketImpl implements IAuthSvc {
                     + "\nsocket get port: " + socket.getPort()
                     + "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()
                     + "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
-       out = new ObjectOutputStream(socket.getOutputStream());
-       System.out.println("\nclient out: "+ out.toString());
-       in = new ObjectInputStream(socket.getInputStream());
-       System.out.println("\nclient in: "+ in.toString());
-       out.writeObject(login.getUsername());
-       out.writeObject(login.getPassword());
-      
-           
+            out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("\nclient out: " + out.toString());
+            in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("\nclient in: " + in.toString());
+            out.writeObject(login.getUsername());
+            out.writeObject(login.getPassword());
+
+
         } catch (Exception e) {
             // log the error
             System.out.println("Exception " + e.getMessage());
@@ -57,36 +60,27 @@ public class IAuthSvcSocketImpl implements IAuthSvc {
     }
 
     public Login getUser(Login login) {
-        Socket socket = null;
-        ObjectInputStream in = null;
-        try {
-            InetAddress connect = InetAddress.getLocalHost();
-            socket = new Socket(connect, 4444);
-            System.out.println("socket channel: " + socket.getChannel()
-                    + "\nsocket inet address: " + socket.getInetAddress()
-                    + "\nsocket get input stream: " + socket.getInputStream()
-                    + "\nsocket local address: " + socket.getLocalAddress()
-                    + "\nsocket local port: " + socket.getLocalPort()
-                    + "\nsocket local socket address: " + socket.getLocalSocketAddress()
-                    + "\nsocket get output stream: " + socket.getOutputStream()
-                    + "\nsocket get port: " + socket.getPort()
-                    + "\nsocket get recieved buffer size: " + socket.getReceiveBufferSize()
-                    + "\nsocket get remote socket address: " + socket.getRemoteSocketAddress());
+        login.setUsername(null);
+        login.setPassword(null);
+        ObjectInputStream input = null;
 
-       in = new ObjectInputStream(socket.getInputStream());
-       login = (Login)in.readObject(); 
-       
-        } catch (Exception e) {
-            // log the error
-            System.out.println("Exception " + e.getMessage());
-        } finally {
-            try {
-                in.close();
-                socket.close();
-            } catch (Exception e) {
-                // log the error
-                System.out.println("Exception " + e.getMessage());
-            }
+        try {
+            input = new ObjectInputStream(new FileInputStream("login.txt"));
+        } catch (IOException ex) {
+            Logger.getLogger(IAuthSvcSocketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            login = (Login) input.readObject();
+        } catch (IOException ex) {
+            Logger.getLogger(IAuthSvcSocketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(IAuthSvcSocketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            input.close();
+        } catch (IOException ex) {
+            Logger.getLogger(IAuthSvcSocketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return login;
     }

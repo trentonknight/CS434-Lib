@@ -7,6 +7,7 @@ package library.service;
 import library.domain.Login;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.junit.Test.*;
 
 /**
  *
@@ -21,27 +22,18 @@ public class IAuthSvcSocketImplTest {
      * Test of add method, of class IAuthSvcSocketImpl.
      */
     @Test
-    public void testAdd() {
+    public void testGetAdd() {
         System.out.println("add");
         Login login = new Login();
         login.setUsername("admin");
         login.setPassword("passwordHere");
         IAuthSvcSocketImpl instance = new IAuthSvcSocketImpl();
-        Login result = instance.add(login);
-        
+        instance.add(login);
+        Login newLogin = instance.getUser(login);
+        assertSame(newLogin, login);
     }
 
-    /**
-     * Test of getUser method, of class IAuthSvcSocketImpl.
-     */
-    @Test
-    public void testGetUser() {
-        System.out.println("getUser");
-        Login login = null;
-        IAuthSvcSocketImpl instance = new IAuthSvcSocketImpl();
-        Login expResult = null;
-        Login result = instance.getUser(login);
-        assertEquals(expResult, result);
-        
-    }
+    
+
+    
 }

@@ -30,7 +30,7 @@ public class IBookSvcSerializedImpl implements IBookSvc {
         
         try{
             book = null;
-            ObjectInputStream input = new ObjectInputStream(new FileInputStream("stream.txt"));
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("login.txt"));
             book = (Book)input.readObject(); 
             input.close();
         }catch(Exception e){
